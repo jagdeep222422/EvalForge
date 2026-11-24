@@ -1,0 +1,11 @@
+[
+  "tests/test_string_length.py::test_accepts_value_within_range",
+  "tests/test_string_length.py::test_bounds_are_inclusive",
+  "tests/test_string_length.py::test_too_short_raises_bad_parameter",
+  "tests/test_string_length.py::test_too_long_raises_bad_parameter",
+  "tests/test_string_length.py::test_no_bounds_accepts_any_length",
+  "tests/test_string_length.py::test_min_greater_than_max_is_rejected",
+  "tests/test_string_length.py::test_converts_bytes_like_string_type",
+  "tests/test_string_length.py::test_cli_option_reports_length_error",
+  "tests/test_string_length.py::test_cli_option_accepts_valid_value"
+]

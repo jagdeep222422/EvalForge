@@ -1,0 +1,69 @@
+diff --git a/src/click/__init__.py b/src/click/__init__.py
+index a34ab02..8dfcf94 100644
+--- a/src/click/__init__.py
++++ b/src/click/__init__.py
+@@ -61,6 +61,7 @@ from .types import FLOAT as FLOAT
+ from .types import FloatRange as FloatRange
+ from .types import INT as INT
+ from .types import IntRange as IntRange
++from .types import StringLength as StringLength
+ from .types import ParamType as ParamType
+ from .types import Path as Path
+ from .types import STRING as STRING
+diff --git a/src/click/types.py b/src/click/types.py
+index b6e98a9..5b25182 100644
+--- a/src/click/types.py
++++ b/src/click/types.py
+@@ -326,6 +326,52 @@ class StringParamType(ParamType[str]):
+         return "STRING"
+ 
+ 
++class StringLength(StringParamType):
++    """A string parameter whose length must fall within an optional range.
++
++    :param min_length: Minimum number of characters, inclusive. ``None`` means no minimum.
++    :param max_length: Maximum number of characters, inclusive. ``None`` means no maximum.
++    """
++
++    name = "text"
++
++    def __init__(
++        self, min_length: int | None = None, max_length: int | None = None
++    ) -> None:
++        if min_length is not None and max_length is not None and min_length > max_length:
++            raise ValueError("'min_length' cannot be greater than 'max_length'.")
++
++        self.min_length = min_length
++        self.max_length = max_length
++
++    def convert(
++        self, value: t.Any, param: Parameter | None, ctx: Context | None
++    ) -> str:
++        converted = super().convert(value, param, ctx)
++        length = len(converted)
++
++        if self.min_length is not None and length < self.min_length:
++            self.fail(
++                f"{converted!r} is too short; it must be at least"
++                f" {self.min_length} characters.",
++                param,
++                ctx,
++            )
++
++        if self.max_length is not None and length > self.max_length:
++            self.fail(
++                f"{converted!r} is too long; it must be at most"
++                f" {self.max_length} characters.",
++                param,
++                ctx,
++            )
++
++        return converted
++
++    def __repr__(self) -> str:
++        return f"StringLength(min_length={self.min_length}, max_length={self.max_length})"
++
++
+ if t.TYPE_CHECKING:
+     # on Python 3.10 this will raise a TypeError
+ 

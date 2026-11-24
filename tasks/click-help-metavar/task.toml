@@ -1,0 +1,34 @@
+schema_version = "1.4"
+artifacts = []
+
+[task]
+name = "jagdeep222422/click-help-metavar"
+version = "1.0.0"
+description = "Add show_metavar to click Option help output."
+authors = ["Jagdeep Kumar Mahto"]
+keywords = ["python", "cli", "click", "feature"]
+base_commit = "cf19179e8e2fd54c601378cec9e0d21bb12b6fb1"
+license = "BSD-3-Clause"
+repository = "https://github.com/pallets/click"
+
+[metadata]
+
+[verifier]
+timeout_sec = 600.0
+environment_mode = "separate"
+collect = []
+
+[verifier.env]
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+network_mode = "public"
+build_timeout_sec = 600.0
+os = "linux"
+mcp_servers = []
+
+[environment.env]
+
+[solution.env]

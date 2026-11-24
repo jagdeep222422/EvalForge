@@ -1,0 +1,8 @@
+[
+  "tests/test_help_metavar.py::test_show_metavar_false_hides_placeholder",
+  "tests/test_help_metavar.py::test_show_metavar_false_keeps_description",
+  "tests/test_help_metavar.py::test_show_metavar_default_is_true",
+  "tests/test_help_metavar.py::test_show_metavar_is_stored_on_option",
+  "tests/test_help_metavar.py::test_get_help_spec_without_metavar",
+  "tests/test_help_metavar.py::test_flag_help_is_unaffected_by_show_metavar"
+]

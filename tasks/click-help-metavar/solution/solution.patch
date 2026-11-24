@@ -1,0 +1,47 @@
+diff --git a/src/click/core.py b/src/click/core.py
+index e4b6b57..e689ef7 100644
+--- a/src/click/core.py
++++ b/src/click/core.py
+@@ -2904,6 +2904,9 @@ class Option(Parameter):
+     :param show_envvar: Controls if an environment variable should be
+         shown on the help page and error messages.
+         Normally, environment variables are not shown.
++    :param show_metavar: Set to false to leave the value placeholder, such as
++        ``TEXT``, out of the option's spelling on the help page. Defaults to
++        true. Flags never show a placeholder.
+     :param prompt: If set to ``True`` or a non empty string then the
+         user will be prompted for input. If set to ``True`` the prompt
+         will be the option name capitalized. A deprecated option cannot be
+@@ -2979,6 +2982,7 @@ class Option(Parameter):
+     show_default: bool | str | None
+     show_choices: bool
+     show_envvar: bool
++    show_metavar: bool
+ 
+     def __init__(
+         self,
+@@ -2998,6 +3002,7 @@ class Option(Parameter):
+         hidden: bool = False,
+         show_choices: bool = True,
+         show_envvar: bool = False,
++        show_metavar: bool = True,
+         deprecated: bool | str = False,
+         **attrs: t.Any,
+     ) -> None:
+@@ -3053,6 +3058,7 @@ class Option(Parameter):
+         self.show_default = show_default
+         self.show_choices = show_choices
+         self.show_envvar = show_envvar
++        self.show_metavar = show_metavar
+ 
+         # Phase 5: validate. Raises on illegal kwarg combinations.
+         self._validate(prompt, deprecated)
+@@ -3383,7 +3389,7 @@ class Option(Parameter):
+             if any_slashes:
+                 any_prefix_is_slash = True
+ 
+-            if not self.is_flag and not self.count:
++            if not self.is_flag and not self.count and self.show_metavar:
+                 rv += f" {self.make_metavar(ctx=ctx)}"
+ 
+             return rv

@@ -1,0 +1,9 @@
+[
+  "tests/test_group_alias.py::test_alias_runs_target_command",
+  "tests/test_group_alias.py::test_alias_resolves_via_get_command",
+  "tests/test_group_alias.py::test_real_command_takes_precedence_over_alias",
+  "tests/test_group_alias.py::test_alias_to_missing_command_is_unknown",
+  "tests/test_group_alias.py::test_unknown_name_still_fails_with_exit_2",
+  "tests/test_group_alias.py::test_aliases_are_hidden_from_command_listing",
+  "tests/test_group_alias.py::test_aliases_are_stored_as_a_dict"
+]

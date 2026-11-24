@@ -1,0 +1,40 @@
+diff --git a/src/click/core.py b/src/click/core.py
+index e4b6b57..1c0d75c 100644
+--- a/src/click/core.py
++++ b/src/click/core.py
+@@ -1738,6 +1738,7 @@ class Group(Command):
+         subcommand_metavar: str | None = None,
+         chain: bool = False,
+         result_callback: t.Callable[..., t.Any] | None = None,
++        aliases: cabc.Mapping[str, str] | None = None,
+         **kwargs: t.Any,
+     ) -> None:
+         super().__init__(name, **kwargs)
+@@ -1750,6 +1751,10 @@ class Group(Command):
+         #: The registered subcommands by their exported names.
+         self.commands = commands
+ 
++        #: Alternative names mapped to the name of a registered subcommand.
++        #: Aliases are used only when the name is not a registered command.
++        self.aliases: dict[str, str] = dict(aliases) if aliases else {}
++
+         if no_args_is_help is None:
+             no_args_is_help = not invoke_without_command
+ 
+@@ -1960,7 +1965,15 @@ class Group(Command):
+         """Given a context and a command name, this returns a :class:`Command`
+         object if it exists or returns ``None``.
+         """
+-        return self.commands.get(cmd_name)
++        if cmd_name in self.commands:
++            return self.commands[cmd_name]
++
++        target = self.aliases.get(cmd_name)
++
++        if target is None:
++            return None
++
++        return self.commands.get(target)
+ 
+     def list_commands(self, ctx: Context) -> list[str]:
+         """Returns a list of subcommand names in the order they should appear."""

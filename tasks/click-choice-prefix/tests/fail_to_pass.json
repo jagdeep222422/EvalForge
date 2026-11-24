@@ -1,0 +1,10 @@
+[
+  "tests/test_choice_prefix.py::test_unique_prefix_resolves_to_choice",
+  "tests/test_choice_prefix.py::test_exact_match_wins_over_prefix",
+  "tests/test_choice_prefix.py::test_ambiguous_prefix_fails",
+  "tests/test_choice_prefix.py::test_empty_value_never_matches_by_prefix",
+  "tests/test_choice_prefix.py::test_prefix_respects_case_sensitivity",
+  "tests/test_choice_prefix.py::test_prefix_returns_original_enum_choice",
+  "tests/test_choice_prefix.py::test_cli_accepts_unique_prefix",
+  "tests/test_choice_prefix.py::test_cli_rejects_ambiguous_prefix_with_exit_2"
+]

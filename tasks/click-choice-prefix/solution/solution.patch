@@ -1,0 +1,67 @@
+diff --git a/src/click/types.py b/src/click/types.py
+index b6e98a9..416d774 100644
+--- a/src/click/types.py
++++ b/src/click/types.py
+@@ -352,6 +352,9 @@ class Choice(ParamType[_ValueT_co], t.Generic[_ValueT_co]):
+ 
+     :param case_sensitive: Set to false to make choices case
+         insensitive. Defaults to true.
++    :param allow_prefix: Set to true to accept a value that is a unique
++        prefix of exactly one choice. An exact match always takes precedence.
++        Defaults to false.
+ 
+     .. versionchanged:: 8.4.0
+         Now generic in the choice value type. Parameterize with the type of
+@@ -373,10 +376,14 @@ class Choice(ParamType[_ValueT_co], t.Generic[_ValueT_co]):
+     case_sensitive: bool
+ 
+     def __init__(
+-        self, choices: cabc.Iterable[_ValueT_co], case_sensitive: bool = True
++        self,
++        choices: cabc.Iterable[_ValueT_co],
++        case_sensitive: bool = True,
++        allow_prefix: bool = False,
+     ) -> None:
+         self.choices = tuple(choices)
+         self.case_sensitive = case_sensitive
++        self.allow_prefix = allow_prefix
+ 
+     def to_info_dict(self) -> ChoiceInfoDict[_ValueT_co]:
+         return {
+@@ -469,11 +476,31 @@ class Choice(ParamType[_ValueT_co], t.Generic[_ValueT_co]):
+                 if normalized == normed_value
+             )
+         except StopIteration:
+-            self.fail(
+-                self.get_invalid_choice_message(value=value, ctx=ctx),
+-                param=param,
+-                ctx=ctx,
+-            )
++            pass
++
++        if self.allow_prefix and normed_value:
++            matches = [
++                original
++                for original, normalized in normalized_mapping.items()
++                if normalized.startswith(normed_value)
++            ]
++
++            if len(matches) == 1:
++                return matches[0]
++
++            if len(matches) > 1:
++                names = ", ".join(map(repr, (normalized_mapping[m] for m in matches)))
++                self.fail(
++                    f"{value!r} is ambiguous; it matches {names}.",
++                    param=param,
++                    ctx=ctx,
++                )
++
++        self.fail(
++            self.get_invalid_choice_message(value=value, ctx=ctx),
++            param=param,
++            ctx=ctx,
++        )
+ 
+     def get_invalid_choice_message(self, value: t.Any, ctx: Context | None) -> str:
+         """Get the error message when the given choice is invalid.

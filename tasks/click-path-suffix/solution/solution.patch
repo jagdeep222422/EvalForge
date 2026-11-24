@@ -1,0 +1,36 @@
+diff --git a/src/click/types.py b/src/click/types.py
+index b6e98a9..6bb9b78 100644
+--- a/src/click/types.py
++++ b/src/click/types.py
+@@ -1115,8 +1115,12 @@ class Path(ParamType[_PathT_co, str | os.PathLike[str]], t.Generic[_PathT_co]):
+         allow_dash: bool = False,
+         path_type: type[_PathT_co] | None = None,
+         executable: bool = False,
++        allowed_suffixes: cabc.Sequence[str] | None = None,
+     ) -> None:
+         self.exists = exists
++        self.allowed_suffixes = (
++            None if allowed_suffixes is None else tuple(allowed_suffixes)
++        )
+         self.file_okay = file_okay
+         self.dir_okay = dir_okay
+         self.readable = readable
+@@ -1169,6 +1173,18 @@ class Path(ParamType[_PathT_co, str | os.PathLike[str]], t.Generic[_PathT_co]):
+         dash = b"-" if isinstance(rv, bytes) else "-"
+         is_dash = self.file_okay and self.allow_dash and rv == dash
+ 
++        if not is_dash and self.allowed_suffixes is not None:
++            if not os.fspath(value).endswith(self.allowed_suffixes):
++                self.fail(
++                    _("{name} {filename!r} must end with one of: {suffixes}.").format(
++                        name=self.name.title(),
++                        filename=format_filename(value),
++                        suffixes=", ".join(self.allowed_suffixes),
++                    ),
++                    param,
++                    ctx,
++                )
++
+         if not is_dash:
+             if self.resolve_path:
+                 rv = os.path.realpath(rv)

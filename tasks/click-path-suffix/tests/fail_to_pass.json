@@ -1,0 +1,11 @@
+[
+  "tests/test_path_suffix.py::test_allowed_suffix_is_accepted",
+  "tests/test_path_suffix.py::test_other_suffix_is_rejected",
+  "tests/test_path_suffix.py::test_suffix_checked_even_when_file_missing",
+  "tests/test_path_suffix.py::test_missing_file_with_allowed_suffix_is_accepted",
+  "tests/test_path_suffix.py::test_matching_is_case_sensitive",
+  "tests/test_path_suffix.py::test_dash_is_exempt_from_suffix_check",
+  "tests/test_path_suffix.py::test_suffix_check_runs_before_existence_check",
+  "tests/test_path_suffix.py::test_cli_rejects_wrong_suffix_with_exit_2",
+  "tests/test_path_suffix.py::test_cli_accepts_allowed_suffix"
+]

@@ -66,3 +66,10 @@ def test_cli_accepts_allowed_suffix(tmp_path):
 
     result = CliRunner().invoke(cli, ["--input", str(tmp_path / "ok.csv")])
     assert result.exit_code == 0
+
+
+def test_every_listed_suffix_is_accepted(tmp_path):
+    t = Path(allowed_suffixes=[".csv", ".json", ".yaml"])
+    for ext in (".csv", ".json", ".yaml"):
+        name = str(tmp_path / f"data{ext}")
+        assert t.convert(name, None, None) == name

@@ -5,13 +5,14 @@ artifacts = []
 name = "jagdeep222422/click-path-suffix"
 version = "1.0.0"
 description = "Add allowed_suffixes filtering to click Path."
-authors = ["Jagdeep Kumar Mahto"]
+authors = [{ name = "Jagdeep Kumar Mahto" }]
 keywords = ["python", "cli", "click", "feature"]
-base_commit = "cf19179e8e2fd54c601378cec9e0d21bb12b6fb1"
-license = "BSD-3-Clause"
-repository = "https://github.com/pallets/click"
 
 [metadata]
+base_repository = "https://github.com/pallets/click"
+base_tag = "8.5.1"
+base_commit = "cf19179e8e2fd54c601378cec9e0d21bb12b6fb1"
+license = "BSD-3-Clause"
 
 [verifier]
 timeout_sec = 600.0

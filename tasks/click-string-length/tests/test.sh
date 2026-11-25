@@ -3,5 +3,5 @@
 set -u
 # Install click as a package so importlib.metadata can find it; source comes from /app/src.
 python3 -m pip install -q -e /app
-cp /tests/test_string_length.py /app/tests/test_string_length.py
+for f in /tests/test_*.py; do cp "$f" /app/tests/; done
 python3 /tests/grade.py

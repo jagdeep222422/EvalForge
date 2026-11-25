@@ -50,7 +50,7 @@ def package(cand_dir: pathlib.Path, out_dir: pathlib.Path, meta: dict, regressio
         "#!/bin/bash\n# Harbor verifier entry point. Writes the reward to /logs/verifier/reward.txt.\n"
         "set -u\n"
         "python3 -m pip install -q -e /app\n"
-        + "".join(f"cp /tests/{n} /app/tests/{n}\n" for n in meta["test_files"])
+        + "for f in /tests/test_*.py; do cp \"$f\" /app/tests/; done\n"
         + "python3 /tests/grade.py\n"
     )
     (dst / "tests" / "test.sh").chmod(0o755)

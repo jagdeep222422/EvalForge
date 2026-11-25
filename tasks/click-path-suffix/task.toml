@@ -16,7 +16,7 @@ license = "BSD-3-Clause"
 
 [verifier]
 timeout_sec = 600.0
-environment_mode = "separate"
+environment_mode = "shared"
 collect = []
 
 [verifier.env]

@@ -33,6 +33,12 @@ def package(cand_dir: pathlib.Path, out_dir: pathlib.Path, meta: dict, regressio
 
     shutil.copy(cand_dir / "instruction.md", dst / "instruction.md")
     shutil.copy(cand_dir / "solution.patch", dst / "solution" / "solution.patch")
+    solve = dst / "solution" / "solve.sh"
+    solve.write_text(
+        "#!/bin/bash\n# Oracle solution: apply the reference patch to the click checkout in /app.\n"
+        "set -euo pipefail\ncd /app\ngit apply \"$(dirname \"$0\")/solution.patch\"\n"
+    )
+    solve.chmod(0o755)
     for name in meta["test_files"]:
         shutil.copy(cand_dir / "tests" / name, dst / "tests" / name)
 

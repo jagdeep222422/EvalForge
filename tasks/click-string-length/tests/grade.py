@@ -21,6 +21,7 @@ def run(ids, label):
         [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
          f"--junitxml={xml_path}", *ids],
         cwd=os.environ.get("REPO", "/app"),
+        env=dict(os.environ, PYTHONPATH=os.path.join(os.environ.get("REPO", "/app"), "src")),
     )
     results = {}
     if not os.path.exists(xml_path):

@@ -45,6 +45,7 @@ def package(cand_dir: pathlib.Path, out_dir: pathlib.Path, meta: dict, regressio
     (dst / "tests" / "fail_to_pass.json").write_text(json.dumps(meta["feature_tests"], indent=2) + "\n")
     (dst / "tests" / "pass_to_pass.json").write_text(json.dumps(regression, indent=2) + "\n")
     shutil.copy(TEMPLATES / "grade.py", dst / "tests" / "grade.py")
+    shutil.copy(TEMPLATES / "tests.Dockerfile", dst / "tests" / "Dockerfile")
     (dst / "tests" / "test.sh").write_text(
         "#!/bin/bash\n# Harbor verifier entry point. Writes the reward to /logs/verifier/reward.txt.\n"
         "set -u\n"

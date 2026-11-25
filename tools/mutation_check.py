@@ -1,6 +1,17 @@
-import subprocess, sys, pathlib
-PY="/tmp/claude-0/click-venv/bin/python"; PYTEST="/tmp/claude-0/click-venv/bin/pytest"
-TASKS="/home/claude/evalforge/tasks"
+"""Mutation check: break each reference change on purpose and confirm a feature test catches it.
+
+Usage: CLICK_REPO=/path/to/click PYTHON=/path/to/venv/bin/python python tools/mutation_check.py
+CLICK_REPO must be a clone of pallets/click with tag 8.5.1 checked out (it is reset during the run).
+"""
+import os, subprocess, sys, pathlib
+REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
+PY = os.environ.get("PYTHON", sys.executable)
+PYTEST = [PY, "-m", "pytest"]
+TASKS = str(REPO_ROOT / "tasks")
+CLICK = os.environ.get("CLICK_REPO")
+if not CLICK:
+    sys.exit("Set CLICK_REPO to a clone of pallets/click at tag 8.5.1")
+os.chdir(CLICK)
 MUTANTS = {
  "click-string-length": ("src/click/types.py", [
    ("if self.min_length is not None and length < self.min_length:", "if self.min_length is not None and length <= self.min_length:"),
@@ -29,7 +40,7 @@ def run(task, mut_idx):
     tests = pathlib.Path(f"{TASKS}/{task}/tests")
     testfile = next(p for p in tests.glob("test_*.py"))
     pathlib.Path("tests", testfile.name).write_text(testfile.read_text())
-    r = subprocess.run([PYTEST,"-q","-p","no:cacheprovider",f"tests/{testfile.name}"],capture_output=True,text=True)
+    r = subprocess.run([*PYTEST,"-q","-p","no:cacheprovider",f"tests/{testfile.name}"],capture_output=True,text=True)
     pathlib.Path("tests", testfile.name).unlink()
     subprocess.run(["git","checkout","-q","--","src"],check=True)
     last = r.stdout.strip().splitlines()[-1]
